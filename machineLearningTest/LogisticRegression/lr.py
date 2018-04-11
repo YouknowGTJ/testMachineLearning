@@ -44,12 +44,43 @@ def drawBestFit(weights):
     plt.scatter(x, y, s=50 * (l + 0.2), c=l)
     plt.subplot(111)
     step = np.arange(-3, 3, 0.1)
-    print(step.shape)
     val = (-weights[0] - weights[1] * step) / weights[2]
-    print(val)
     plt.plot(step, val)
     plt.xlabel("x1")
     plt.ylabel("x2")
+    plt.show()
+
+
+def stocGradAscent(dataMatrix, classLables, num):
+    m, n = np.shape(dataMatrix)
+    weights = np.ones(n)
+    weightsList = []
+    for j in range(num):
+        dataIndex = list(range(m))
+        for i in range(m):
+            alpha = 4 / (i + j + 1) + 0.01
+            randIndex = int(np.random.uniform(0, len(dataIndex)))
+            h = sigmoid(sum(dataMatrix[randIndex] * weights))
+            error = classLables[randIndex] - h
+            weights = weights + alpha * error * dataMatrix[randIndex]
+            weightsList.append(weights.tolist())
+            del (dataIndex[randIndex])
+    plotWeights(weightsList)
+    return weights
+
+
+def plotWeights(weightsList):
+    axis = list(range(len(weightsList)))
+    plt.subplot(311)
+    plt.title(" weight 0")
+    print(weightsList)
+    plt.plot(axis, [x[0] for x in weightsList], c="#054E9F")
+    plt.subplot(312)
+    plt.title(" weight 1")
+    plt.plot(axis, [x[1] for x in weightsList], c="red")
+    plt.subplot(313)
+    plt.title(" weight 2")
+    plt.plot(axis, [x[2] for x in weightsList], c="yellow")
     plt.show()
 
 
@@ -58,3 +89,6 @@ if __name__ == '__main__':
     matrix = gradAscent(data, label)
     print(matrix)
     drawBestFit(matrix)
+    stocMatrix = stocGradAscent(np.array(data), label, 80)
+    print(stocMatrix)
+    drawBestFit(stocMatrix)
