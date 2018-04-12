@@ -21,6 +21,11 @@ def sigmoid(inX):
 
 
 def gradAscent(dataMat, labelMat):
+    """
+    :param dataMat:  must be a two dimention list
+    :param labelMat:  shape (n. 1)
+    :return: weights matrix
+    """
     dataMatrix = np.mat(dataMat)
     labelMatrix = np.mat(labelMat).transpose()
     n, m = np.shape(dataMatrix)
@@ -65,7 +70,7 @@ def stocGradAscent(dataMatrix, classLables, num):
             weights = weights + alpha * error * dataMatrix[randIndex]
             weightsList.append(weights.tolist())
             del (dataIndex[randIndex])
-    plotWeights(weightsList)
+    # plotWeights(weightsList)
     return weights
 
 
